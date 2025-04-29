@@ -100,9 +100,9 @@
         
         <!-- 操作按钮 -->
         <view class="action-box">
-          <button type="primary" class="action-btn" @tap="submitFeedback">
-            <tui-icon name="message" color="#fff" :size="28"></tui-icon>
-            提交反馈
+          <button type="primary" class="action-btn" @tap="rateAndReview">
+            <tui-icon name="star" color="#fff" :size="28"></tui-icon>
+            评分评价
           </button>
           <button type="default" class="action-btn" @tap="shareMenu">
             <tui-icon name="share" color="#5677fc" :size="28"></tui-icon>
@@ -272,10 +272,10 @@ export default {
       this.$emit('close')
     },
     
-    // 提交反馈
-    submitFeedback() {
+    // 评分评价
+    rateAndReview() {
       uni.showToast({
-        title: '反馈功能开发中',
+        title: '评分评价功能开发中',
         icon: 'none'
       })
     },
