@@ -85,6 +85,13 @@
         <text>中小学食堂监管平台 · 家长版</text>
       </view>
     </view>
+
+    <!-- 详情组件 -->
+    <menu-detail
+      :visible="showDetailModal"
+      :menuItem="currentMenu"
+      @close="closeDetail"
+    ></menu-detail>
   </view>
 </template>
 
@@ -96,10 +103,12 @@
     getMenuList,
     getFullImageUrl
   } from '@/api/menu.js'
+  import MenuDetail from '@/components/menu-detail/menu-detail.vue'
 
   export default {
     components: {
-      TuiIcon
+      TuiIcon,
+      MenuDetail
     },
     data() {
       return {
@@ -108,6 +117,8 @@
         searchText: '',
         menuList: [],
         originMenuList: [], // 用于搜索过滤
+        showDetailModal: false, // 是否显示详情弹窗
+        currentMenu: null, // 当前查看的菜单
         banners: [{
             image: '/static/images/1.jpg',
             title: '食品安全监管'
@@ -144,12 +155,28 @@
         ]
       }
     },
+    onShow() {
+      console.log('页面显示 onShow')
+    },
+    onReady() {
+      console.log('页面初次渲染完成 onReady')
+    },
     created() {
-      console.log('首页加载完成')
-      this.fetchMenuList()
-      // 打印可用的ThorUI图标
-      console.log('使用的导航图标：', this.navItems.map(item => item.icon))
-      console.log("hhh")
+      console.log('组件创建 created')
+    },
+    mounted() {
+      console.log('组件挂载完成 mounted')
+      
+      // 添加一个强制检查的定时器，确保组件已挂载
+      setTimeout(() => {
+        console.log('定时器触发')
+        // 打印可用的ThorUI图标
+        console.log('使用的导航图标：', this.navItems.map(item => item.icon))
+        console.log("开始获取菜单数据")
+        
+        // 尝试获取菜单数据
+        this.fetchMenuList()
+      }, 500)
     },
     methods: {
       // 获取菜单列表
@@ -228,9 +255,8 @@
 
       // 显示菜单详情
       showMenuDetail(item) {
-        uni.navigateTo({
-          url: `/pages/menu/detail?id=${item.id}`
-        })
+        this.currentMenu = item
+        this.showDetailModal = true
       },
 
       // 显示所有菜单
@@ -244,6 +270,39 @@
       navigateTo(path) {
         uni.navigateTo({
           url: path
+        })
+      },
+
+      // 关闭详情弹窗
+      closeDetail() {
+        this.showDetailModal = false
+        this.currentMenu = null
+      },
+      
+      // 复制哈希值
+      copyHash(hash) {
+        uni.setClipboardData({
+          data: hash,
+          success: () => {
+            uni.showToast({
+              title: '已复制到剪贴板',
+              icon: 'none'
+            })
+          }
+        })
+      },
+      
+      // 缩短哈希字符串
+      shortHash(hash) {
+        if (!hash) return ''
+        return hash.substring(0, 8) + '...' + hash.substring(hash.length - 6)
+      },
+      
+      // 提交反馈
+      submitFeedback() {
+        uni.showToast({
+          title: '反馈功能开发中',
+          icon: 'none'
         })
       }
     }

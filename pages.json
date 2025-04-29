@@ -29,6 +29,13 @@
 			"style": {
 				"navigationBarTitleText": "个人中心"
 			}
+		},
+		{
+			"path": "pages/menu/detail",
+			"style": {
+				"navigationBarTitleText": "菜单详情",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {
