@@ -92,6 +92,9 @@
       :menuItem="currentMenu"
       @close="closeDetail"
     ></menu-detail>
+    
+    <!-- 自定义tabBar -->
+    <tab-bar :current="0"></tab-bar>
   </view>
 </template>
 
@@ -104,11 +107,14 @@
     getFullImageUrl
   } from '@/api/menu.js'
   import MenuDetail from '@/components/menu-detail/menu-detail.vue'
+  import { checkLogin } from '@/utils/auth.js'
+  import TabBar from '@/components/tab-bar/tab-bar.vue'
 
   export default {
     components: {
       TuiIcon,
-      MenuDetail
+      MenuDetail,
+      TabBar
     },
     data() {
       return {
@@ -157,6 +163,10 @@
     },
     onShow() {
       console.log('页面显示 onShow')
+      // 检查登录状态
+      if (!checkLogin()) {
+        return
+      }
     },
     onReady() {
       console.log('页面初次渲染完成 onReady')
@@ -314,6 +324,7 @@
     min-height: 100vh;
     background-color: #f8f8f8;
     box-sizing: border-box;
+    padding-bottom: 120rpx; /* 为tabBar预留空间 */
   }
 
   .container {
@@ -433,7 +444,9 @@
     color: #999;
   }
 
-  .menu-list {}
+  .menu-list {
+    margin-top: 20rpx;
+  }
 
   .menu-item {
     display: flex;
@@ -442,26 +455,30 @@
     border-radius: 12rpx;
     overflow: hidden;
     box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+    height: 200rpx;
   }
 
   .menu-image-box {
     position: relative;
     width: 200rpx;
     height: 200rpx;
+    flex-shrink: 0;
   }
 
   .menu-image {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 
   .menu-tag {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 10rpx;
+    right: 10rpx;
     font-size: 20rpx;
     padding: 4rpx 12rpx;
     color: #fff;
+    border-radius: 6rpx;
   }
 
   .status-pending {
@@ -482,19 +499,21 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    overflow: hidden;
   }
 
   .menu-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
   }
 
   .menu-title {
     font-size: 30rpx;
     font-weight: bold;
     color: #333;
-    width: 60%;
+    max-width: 65%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -506,6 +525,7 @@
     padding: 4rpx 10rpx;
     background-color: rgba(86, 119, 252, 0.1);
     border-radius: 6rpx;
+    flex-shrink: 0;
   }
 
   .menu-date {

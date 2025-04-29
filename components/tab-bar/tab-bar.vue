@@ -1,66 +1,128 @@
 <template>
-	<view class="tab-bar-wrapper">
-		<tui-tabbar :current="current" :tabBar="tabBar" unlined @click="tabbarClick"></tui-tabbar>
+	<view class="tab-bar">
+		<view 
+			class="tab-item" 
+			v-for="(item, index) in tabList" 
+			:key="index" 
+			@tap="switchTab(index)"
+			:class="{ active: current === index }"
+		>
+			<tui-icon 
+				:name="current === index ? item.selectedIcon : item.icon" 
+				:color="current === index ? selectedColor : color" 
+				:size="40"
+			></tui-icon>
+			<text 
+				class="tab-text" 
+				:class="{ 'tab-text-active': current === index }"
+			>
+				{{ item.text }}
+			</text>
+		</view>
 	</view>
 </template>
 
 <script>
-import { TuiTabbar } from '../../utils/thorui.js'
+import { TuiIcon } from '@/utils/thorui.js'
 
 export default {
+	name: 'tab-bar',
 	components: {
-		TuiTabbar
+		TuiIcon
+	},
+	props: {
+		current: {
+			type: Number,
+			default: 0
+		}
 	},
 	data() {
 		return {
-			current: 0,
-			tabBar: {
-				color: "#666666",
-				selectedColor: "#5677FC",
-				backgroundColor: "#FFFFFF",
-				borderStyle: "#F8F8F8",
-				list: [{
-					pagePath: "/pages/home/home",
-					text: "首页",
-					iconPath: "/static/images/tabbar/home.png",
-					selectedIconPath: "/static/images/tabbar/home_selected.png"
-				}, {
-					pagePath: "/pages/process/process",
-					text: "加工处理",
-					iconPath: "/static/images/tabbar/process.png",
-					selectedIconPath: "/static/images/tabbar/process_selected.png"
-				}, {
-					pagePath: "/pages/notice/notice",
-					text: "通知公告",
-					iconPath: "/static/images/tabbar/notice.png",
-					selectedIconPath: "/static/images/tabbar/notice_selected.png"
-				}, {
-					pagePath: "/pages/user/user",
-					text: "个人中心",
-					iconPath: "/static/images/tabbar/user.png",
-					selectedIconPath: "/static/images/tabbar/user_selected.png"
-				}]
-			}
+			color: '#999999',
+			selectedColor: '#5677fc',
+			tabList: [
+				{
+					pagePath: '/pages/home/home',
+					text: '首页',
+					icon: 'home',
+					selectedIcon: 'home-fill'
+				},
+				{
+					pagePath: '/pages/process/process',
+					text: '加工处理',
+					icon: 'setup',
+					selectedIcon: 'setup-fill'
+				},
+				{
+					pagePath: '/pages/notice/notice',
+					text: '通知公告',
+					icon: 'news',
+					selectedIcon: 'news-fill'
+				},
+				{
+					pagePath: '/pages/user/user',
+					text: '个人中心',
+					icon: 'people',
+					selectedIcon: 'people-fill'
+				}
+			]
 		}
 	},
 	methods: {
-		tabbarClick(e) {
-			let index = e.index
-			this.current = index
-			uni.switchTab({
-				url: this.tabBar.list[index].pagePath
-			})
+		switchTab(index) {
+			if (this.current !== index) {
+				uni.switchTab({
+					url: this.tabList[index].pagePath,
+					fail: (err) => {
+						console.error('切换Tab失败:', err)
+						// 降级为navigateTo
+						uni.navigateTo({
+							url: this.tabList[index].pagePath
+						})
+					}
+				})
+			}
 		}
 	}
 }
 </script>
 
 <style>
-.tab-bar-wrapper {
-	width: 100%;
+.tab-bar {
 	position: fixed;
-	left: 0;
 	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 120rpx;
+	background: #ffffff;
+	display: flex;
+	border-top: 1rpx solid #f5f5f5;
+	padding-bottom: env(safe-area-inset-bottom);
 	z-index: 9999;
+}
+
+.tab-item {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-evenly;
+	height: 100%;
+	padding: 10rpx 0;
+}
+
+.tab-text {
+	font-size: 24rpx;
+	color: #999999;
+	margin-top: 8rpx;
+	line-height: 1;
+}
+
+.tab-text-active {
+	color: #5677fc;
+}
+
+.active {
+	font-weight: bold;
 }
 </style> 

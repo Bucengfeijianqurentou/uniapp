@@ -14,15 +14,21 @@
         </view>
       </view>
     </view>
+    
+    <!-- 自定义tabBar -->
+    <tab-bar :current="1"></tab-bar>
   </view>
 </template>
 
 <script>
 import { TuiIcon } from '@/utils/thorui.js'
+import { checkLogin } from '@/utils/auth.js'
+import TabBar from '@/components/tab-bar/tab-bar.vue'
 
 export default {
   components: {
-    TuiIcon
+    TuiIcon,
+    TabBar
   },
   data() {
     return {
@@ -31,6 +37,12 @@ export default {
   },
   onLoad() {
     console.log('加工处理页面加载完成')
+  },
+  onShow() {
+    // 检查登录状态
+    if (!checkLogin()) {
+      return
+    }
   },
   methods: {
     
@@ -42,6 +54,7 @@ export default {
 .page-container {
   min-height: 100vh;
   box-sizing: border-box;
+  padding-bottom: 120rpx; /* 为tabBar预留空间 */
 }
 .container {
   padding: 30rpx;

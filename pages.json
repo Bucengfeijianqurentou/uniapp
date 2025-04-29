@@ -1,6 +1,13 @@
 {
 	"pages": [
 		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "用户登录",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "中小学食堂监管平台"
@@ -50,6 +57,30 @@
 		"navigationBarTitleText": "中小学食堂监管平台",
 		"navigationBarBackgroundColor": "#5677fc",
 		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#999999",
+		"selectedColor": "#5677fc",
+		"backgroundColor": "#ffffff",
+		"borderStyle": "black",
+		"list": [
+			{
+				"pagePath": "pages/home/home",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/process/process",
+				"text": "加工处理"
+			},
+			{
+				"pagePath": "pages/notice/notice",
+				"text": "通知公告"
+			},
+			{
+				"pagePath": "pages/user/user",
+				"text": "个人中心"
+			}
+		]
 	},
 	"uniIdRouter": {}
 }
