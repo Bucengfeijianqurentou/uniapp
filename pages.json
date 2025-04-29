@@ -36,6 +36,13 @@
 				"navigationBarTitleText": "菜单详情",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/inspection/detail",
+			"style": {
+				"navigationBarTitleText": "质检详情",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {

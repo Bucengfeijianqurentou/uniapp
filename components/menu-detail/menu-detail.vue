@@ -82,6 +82,22 @@
           </view>
         </view>
         
+        <!-- 质检信息卡片（新增） -->
+        <view class="info-card inspection-card" @tap="goToInspectionDetail">
+          <view class="info-title">
+            <tui-icon name="check" color="#07c160" :size="32"></tui-icon>
+            <text class="info-title-text">质检信息</text>
+            <view class="go-detail">
+              <text class="go-detail-text">查看详情</text>
+              <tui-icon name="arrowright" color="#5677fc" :size="24"></tui-icon>
+            </view>
+          </view>
+          <view class="inspection-summary">
+            <view class="status-tag status-approved" style="display:inline-block;margin-right:10rpx;">质检已通过</view>
+            <text class="inspection-date">{{formatDate(menuDetail.menuDate)}}</text>
+          </view>
+        </view>
+        
         <!-- 操作按钮 -->
         <view class="action-box">
           <button type="primary" class="action-btn" @tap="submitFeedback">
@@ -270,6 +286,36 @@ export default {
         title: '分享功能开发中',
         icon: 'none'
       })
+    },
+    
+    // 跳转到质检详情页
+    goToInspectionDetail() {
+      // 关闭当前弹窗
+      this.$emit('close')
+      
+      // 跳转到质检详情页面
+      const menuId = this.menuDetail.id || this.menuId
+      if (menuId) {
+        // 使用绝对路径跳转
+        setTimeout(() => {
+          uni.navigateTo({
+            url: `/pages/inspection/detail?menuId=${menuId}`,
+            fail: (err) => {
+              console.error('跳转失败', err)
+              uni.showToast({
+                title: '页面跳转失败，请重新启动应用: ' + err.errMsg,
+                icon: 'none',
+                duration: 3000
+              })
+            }
+          })
+        }, 300) // 延迟执行，确保弹窗已关闭
+      } else {
+        uni.showToast({
+          title: '菜单ID不存在，无法查看质检信息',
+          icon: 'none'
+        })
+      }
     }
   }
 }
@@ -477,5 +523,30 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.inspection-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.inspection-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.go-detail {
+  display: flex;
+  align-items: center;
+}
+
+.go-detail-text {
+  font-size: 28rpx;
+  color: #5677fc;
+  margin-right: 10rpx;
 }
 </style> 
