@@ -108,7 +108,12 @@ export default {
       return account.substring(0, 8) + '...' + account.substring(account.length - 6);
     }
   },
+  onLoad() {
+    console.log('个人中心页面加载 onLoad')
+    this.loadUserInfo();
+  },
   onShow() {
+    console.log('个人中心页面显示 onShow')
     // 检查登录状态
     if (!checkLogin()) {
       return;
@@ -116,6 +121,15 @@ export default {
     
     // 获取最新的用户信息
     this.loadUserInfo();
+  },
+  onReady() {
+    console.log('个人中心页面准备完成 onReady')
+  },
+  onHide() {
+    console.log('个人中心页面隐藏 onHide')
+  },
+  onUnload() {
+    console.log('个人中心页面卸载 onUnload')
   },
   methods: {
     // 加载用户信息

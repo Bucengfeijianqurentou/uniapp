@@ -71,16 +71,42 @@ export default {
 	methods: {
 		switchTab(index) {
 			if (this.current !== index) {
+				// 记录要切换到的页面路径
+				const targetPath = this.tabList[index].pagePath;
+				
+				// 使用uni.switchTab进行切换
 				uni.switchTab({
-					url: this.tabList[index].pagePath,
+					url: targetPath,
+					success: () => {
+						console.log('Tab切换成功到:', targetPath);
+					},
 					fail: (err) => {
-						console.error('切换Tab失败:', err)
-						// 降级为navigateTo
-						uni.navigateTo({
-							url: this.tabList[index].pagePath
-						})
+						console.error('切换Tab失败:', err);
+						
+						// 失败时尝试使用redirectTo，这样能保证页面完全刷新
+						uni.redirectTo({
+							url: targetPath,
+							success: () => {
+								console.log('重定向成功到:', targetPath);
+							},
+							fail: (redirectErr) => {
+								console.error('重定向也失败:', redirectErr);
+								
+								// 最后尝试navigateTo
+								uni.navigateTo({
+									url: targetPath,
+									fail: (navErr) => {
+										console.error('导航也失败:', navErr);
+										uni.showToast({
+											title: '页面跳转失败',
+											icon: 'none'
+										});
+									}
+								});
+							}
+						});
 					}
-				})
+				});
 			}
 		}
 	}
