@@ -8,17 +8,17 @@
 <script>
 import MainContainer from '@/components/main-container/main-container.vue'
 
-export default {
+  export default {
   components: {
     MainContainer
   },
-  data() {
+    data() {
     return {}
-  },
-  onLoad() {
+    },
+    onLoad() {
     console.log('主页面加载完成')
+    }
   }
-}
 </script>
 
 <style>
