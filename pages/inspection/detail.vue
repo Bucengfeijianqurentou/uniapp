@@ -42,7 +42,7 @@
           
           <!-- 质检图片 -->
           <view class="image-box" v-if="inspectionDetail.imagePath">
-            <image :src="getFullImageUrl(inspectionDetail.imagePath)" mode="aspectFill" class="inspection-image"></image>
+            <image :src="getFullImageUrl(inspectionDetail.imagePath)" mode="aspectFill" class="inspection-image" @tap="previewImage"></image>
           </view>
           
           <!-- 质检内容 -->
@@ -233,6 +233,49 @@ export default {
         title: '分享功能开发中',
         icon: 'none'
       })
+    },
+    
+    // 预览图片
+    previewImage() {
+      if (!this.inspectionDetail.imagePath) return;
+      
+      const imageUrl = this.getFullImageUrl(this.inspectionDetail.imagePath);
+      uni.previewImage({
+        current: imageUrl,
+        urls: [imageUrl],
+        indicator: 'number',
+        loop: false,
+        longPressActions: {
+          itemList: ['保存图片'],
+          success: (data) => {
+            if (data.tapIndex === 0) {
+              // 保存图片
+              uni.saveImageToPhotosAlbum({
+                filePath: imageUrl,
+                success: () => {
+                  uni.showToast({
+                    title: '保存成功',
+                    icon: 'success'
+                  });
+                },
+                fail: () => {
+                  uni.showToast({
+                    title: '保存失败',
+                    icon: 'none'
+                  });
+                }
+              });
+            }
+          }
+        },
+        fail: (err) => {
+          console.error('图片预览失败', err);
+          uni.showToast({
+            title: '图片预览失败',
+            icon: 'none'
+          });
+        }
+      });
     }
   }
 }
