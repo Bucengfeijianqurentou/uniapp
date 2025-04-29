@@ -124,12 +124,12 @@ export default {
           path: '/pages/menu/weekly'
         },
         {
-          icon: 'scan',
-          name: '扫码溯源',
-          path: '/pages/scan/index'
+          icon: 'shop',
+          name: '食材信息',
+          path: '/pages/food/info'
         },
         {
-          icon: 'rate',
+          icon: 'feedback',
           name: '评价反馈',
           path: '/pages/feedback/index'
         },
@@ -144,6 +144,8 @@ export default {
   onLoad() {
     console.log('首页加载完成')
     this.fetchMenuList()
+    // 打印可用的ThorUI图标
+    console.log('使用的导航图标：', this.navItems.map(item => item.icon))
   },
   methods: {
     // 获取菜单列表
