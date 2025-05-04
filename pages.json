@@ -50,6 +50,20 @@
 				"navigationBarTitleText": "质检详情",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/menu/rating",
+			"style": {
+				"navigationBarTitleText": "菜品评分评价",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/menu/ratings-list",
+			"style": {
+				"navigationBarTitleText": "菜品评价列表",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {

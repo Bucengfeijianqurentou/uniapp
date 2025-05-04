@@ -1,113 +1,154 @@
 <template>
-  <view class="detail-overlay" v-if="visible">
-    <view class="overlay-mask" @tap="handleClose"></view>
-    <view class="detail-container">
-      <!-- 返回导航 -->
-      <view class="nav-back" @tap="handleClose">
-        <tui-icon name="close" :size="36" color="#333"></tui-icon>
-        <text class="nav-back-text">关闭</text>
-      </view>
-      
-      <!-- 加载提示 -->
-      <view class="loading-box" v-if="loading">
-        <tui-icon name="loading" color="#5677fc" :size="40"></tui-icon>
-        <text class="loading-text">加载中...</text>
-      </view>
-      
-      <!-- 错误提示 -->
-      <view class="error-box" v-else-if="loadError">
-        <tui-icon name="warning" color="#ff7900" :size="80"></tui-icon>
-        <text class="error-text">{{errorMsg}}</text>
-        <view class="error-btn">
-          <button type="primary" size="mini" @tap="loadMenuDetail">重新加载</button>
+  <view>
+    <view class="detail-overlay" v-if="visible">
+      <view class="overlay-mask" @tap="handleClose"></view>
+      <view class="detail-container">
+        <!-- 返回导航 -->
+        <view class="nav-back" @tap="handleClose">
+          <tui-icon name="close" :size="36" color="#333"></tui-icon>
+          <text class="nav-back-text">关闭</text>
         </view>
-      </view>
-      
-      <!-- 菜单详情内容 -->
-      <view class="menu-detail" v-else>
-        <view class="detail-header">
-          <view class="detail-title">
-            <text class="title-text">{{menuDetail.dishes}}</text>
-            <view class="status-tag" :class="getStatusClass(menuDetail.status)">
-              {{getStatusText(menuDetail.status)}}
+        
+        <!-- 加载提示 -->
+        <view class="loading-box" v-if="loading">
+          <tui-icon name="loading" color="#5677fc" :size="40"></tui-icon>
+          <text class="loading-text">加载中...</text>
+        </view>
+        
+        <!-- 错误提示 -->
+        <view class="error-box" v-else-if="loadError">
+          <tui-icon name="warning" color="#ff7900" :size="80"></tui-icon>
+          <text class="error-text">{{errorMsg}}</text>
+          <view class="error-btn">
+            <button type="primary" size="mini" @tap="loadMenuDetail">重新加载</button>
+          </view>
+        </view>
+        
+        <!-- 菜单详情内容 -->
+        <view class="menu-detail" v-else>
+          <view class="detail-header">
+            <view class="detail-title">
+              <text class="title-text">{{menuDetail.dishes}}</text>
+              <view class="status-tag" :class="getStatusClass(menuDetail.status)">
+                {{getStatusText(menuDetail.status)}}
+              </view>
+            </view>
+            <view class="detail-subtitle">
+              <text class="meal-type">{{menuDetail.mealType}}</text>
+              <text class="menu-date">{{formatDate(menuDetail.menuDate)}}</text>
             </view>
           </view>
-          <view class="detail-subtitle">
-            <text class="meal-type">{{menuDetail.mealType}}</text>
-            <text class="menu-date">{{formatDate(menuDetail.menuDate)}}</text>
+          
+          <!-- 菜品图片 -->
+          <view class="menu-image-box">
+            <image :src="getFullImageUrl(menuDetail.imagePath)" mode="aspectFill" class="menu-image"></image>
           </view>
-        </view>
-        
-        <!-- 菜品图片 -->
-        <view class="menu-image-box">
-          <image :src="getFullImageUrl(menuDetail.imagePath)" mode="aspectFill" class="menu-image"></image>
-        </view>
-        
-        <!-- 菜单信息 -->
-        <view class="info-card">
-          <view class="info-title">
-            <tui-icon name="people" color="#5677fc" :size="32"></tui-icon>
-            <text class="info-title-text">提供信息</text>
-          </view>
-          <view class="info-item">
-            <text class="info-label">提供者：</text>
-            <text class="info-value">{{menuDetail.userRealname}}</text>
-          </view>
-          <view class="info-item">
-            <text class="info-label">日期：</text>
-            <text class="info-value">{{formatDate(menuDetail.menuDate)}}</text>
-          </view>
-          <view class="info-item">
-            <text class="info-label">餐次：</text>
-            <text class="info-value">{{menuDetail.mealType}}</text>
-          </view>
-          <view class="info-item">
-            <text class="info-label">菜品：</text>
-            <text class="info-value">{{menuDetail.dishes}}</text>
-          </view>
-        </view>
-        
-        <!-- 区块链信息 -->
-        <view class="info-card" v-if="menuDetail.transactionHash">
-          <view class="info-title">
-            <tui-icon name="shield" color="#5677fc" :size="32"></tui-icon>
-            <text class="info-title-text">溯源信息</text>
-          </view>
-          <view class="info-item blockchain">
-            <text class="info-label">区块链交易哈希：</text>
-            <text class="hash-value" @tap="copyHash(menuDetail.transactionHash)">
-              {{shortHash(menuDetail.transactionHash)}}
-              <tui-icon name="copy" color="#5677fc" :size="26"></tui-icon>
-            </text>
-          </view>
-        </view>
-        
-        <!-- 质检信息卡片（新增） -->
-        <view class="info-card inspection-card" @tap="goToInspectionDetail">
-          <view class="info-title">
-            <tui-icon name="check" color="#07c160" :size="32"></tui-icon>
-            <text class="info-title-text">质检信息</text>
-            <view class="go-detail">
-              <text class="go-detail-text">查看详情</text>
-              <tui-icon name="arrowright" color="#5677fc" :size="24"></tui-icon>
+          
+          <!-- 菜单信息 -->
+          <view class="info-card">
+            <view class="info-title">
+              <tui-icon name="people" color="#5677fc" :size="32"></tui-icon>
+              <text class="info-title-text">提供信息</text>
+            </view>
+            <view class="info-item">
+              <text class="info-label">提供者：</text>
+              <text class="info-value">{{menuDetail.userRealname}}</text>
+            </view>
+            <view class="info-item">
+              <text class="info-label">日期：</text>
+              <text class="info-value">{{formatDate(menuDetail.menuDate)}}</text>
+            </view>
+            <view class="info-item">
+              <text class="info-label">餐次：</text>
+              <text class="info-value">{{menuDetail.mealType}}</text>
+            </view>
+            <view class="info-item">
+              <text class="info-label">菜品：</text>
+              <text class="info-value">{{menuDetail.dishes}}</text>
             </view>
           </view>
-          <view class="inspection-summary">
-            <view class="status-tag status-approved" style="display:inline-block;margin-right:10rpx;">质检已通过</view>
-            <text class="inspection-date">{{formatDate(menuDetail.menuDate)}}</text>
+          
+          <!-- 区块链信息 -->
+          <view class="info-card" v-if="menuDetail.transactionHash">
+            <view class="info-title">
+              <tui-icon name="shield" color="#5677fc" :size="32"></tui-icon>
+              <text class="info-title-text">溯源信息</text>
+            </view>
+            <view class="info-item blockchain">
+              <text class="info-label">区块链交易哈希：</text>
+              <text class="hash-value" @tap="copyHash(menuDetail.transactionHash)">
+                {{shortHash(menuDetail.transactionHash)}}
+                <tui-icon name="copy" color="#5677fc" :size="26"></tui-icon>
+              </text>
+            </view>
+          </view>
+          
+          <!-- 质检信息卡片（新增） -->
+          <view class="info-card inspection-card" @tap="goToInspectionDetail">
+            <view class="info-title">
+              <tui-icon name="check" color="#07c160" :size="32"></tui-icon>
+              <text class="info-title-text">质检信息</text>
+              <view class="go-detail">
+                <text class="go-detail-text">查看详情</text>
+                <tui-icon name="arrowright" color="#5677fc" :size="24"></tui-icon>
+              </view>
+            </view>
+            <view class="inspection-summary">
+              <view class="status-tag status-approved" style="display:inline-block;margin-right:10rpx;">质检已通过</view>
+              <text class="inspection-date">{{formatDate(menuDetail.menuDate)}}</text>
+            </view>
+          </view>
+          
+          <!-- 操作按钮 -->
+          <view class="action-box">
+            <button type="primary" class="action-btn" @tap="rateAndReview">
+              <tui-icon name="star" color="#fff" :size="28"></tui-icon>
+              评分评价
+            </button>
+            <button type="default" class="action-btn" @tap="viewAllRatings">
+              <tui-icon name="comment" color="#5677fc" :size="28"></tui-icon>
+              查看评价
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 评分评价弹窗 -->
+    <view class="rating-popup" v-if="visible && showRating">
+      <view class="rating-popup-mask" @tap="closeRatingPopup"></view>
+      <view class="rating-popup-content">
+        <view class="rating-popup-header">
+          <text class="rating-popup-title">菜品评分评价</text>
+          <tui-icon name="close" color="#999" :size="36" @tap="closeRatingPopup"></tui-icon>
+        </view>
+        
+        <view class="rating-popup-body">
+          <view class="rating-stars-select">
+            <text class="rating-label">请选择评分：</text>
+            <view class="rating-stars">
+              <tui-icon v-for="n in 5" :key="n" :name="n <= userRating ? 'star-fill' : 'star'" 
+                :color="n <= userRating ? '#ff9700' : '#ccc'" :size="40" 
+                @tap="setRating(n)"></tui-icon>
+            </view>
+            <text class="rating-text">{{userRating}}分</text>
+          </view>
+          
+          <view class="comment-input">
+            <text class="comment-label">评价内容：</text>
+            <textarea class="comment-textarea" v-model="userComment" 
+              placeholder="请输入您对这道菜品的评价..." />
+          </view>
+          
+          <!-- 添加明显的提交按钮 -->
+          <view class="prominent-submit">
+            <button type="primary" @tap="submitRating">提交评价</button>
           </view>
         </view>
         
-        <!-- 操作按钮 -->
-        <view class="action-box">
-          <button type="primary" class="action-btn" @tap="rateAndReview">
-            <tui-icon name="star" color="#fff" :size="28"></tui-icon>
-            评分评价
-          </button>
-          <button type="default" class="action-btn" @tap="shareMenu">
-            <tui-icon name="share" color="#5677fc" :size="28"></tui-icon>
-            分享菜单
-          </button>
+        <view class="rating-popup-footer">
+          <button type="default" class="popup-btn" @tap="closeRatingPopup">取消</button>
+          <button type="primary" class="popup-btn" @tap="submitRating">提交评价</button>
         </view>
       </view>
     </view>
@@ -117,6 +158,8 @@
 <script>
 import { TuiIcon } from '@/utils/thorui.js'
 import { getMenuDetail, getFullImageUrl } from '@/api/menu.js'
+import { submitEvaluation } from '@/api/evaluation.js'
+import { getUserInfo, checkLogin } from '@/utils/auth.js'
 
 export default {
   name: 'menu-detail',
@@ -153,7 +196,11 @@ export default {
         imagePath: '',
         processIds: '',
         transactionHash: ''
-      }
+      },
+      // 评分评价相关数据
+      showRating: false,
+      userRating: 5,
+      userComment: ''
     }
   },
   watch: {
@@ -274,17 +321,100 @@ export default {
     
     // 评分评价
     rateAndReview() {
-      uni.showToast({
-        title: '评分评价功能开发中',
-        icon: 'none'
+      // 检查用户是否已登录
+      if (!checkLogin()) return
+      
+      // 跳转到评分页面
+      uni.navigateTo({
+        url: `/pages/menu/rating?id=${this.menuDetail.id}&name=${this.menuDetail.dishes}&date=${this.formatDate(this.menuDetail.menuDate)}&mealType=${this.menuDetail.mealType}`,
+        fail: (err) => {
+          console.error('跳转失败', err)
+          uni.showToast({
+            title: '页面跳转失败',
+            icon: 'none'
+          })
+        }
       })
     },
     
-    // 分享菜单
-    shareMenu() {
-      uni.showToast({
-        title: '分享功能开发中',
-        icon: 'none'
+    // 关闭评分弹窗
+    closeRatingPopup() {
+      this.showRating = false
+      // 重置评分和评论
+      this.userRating = 5
+      this.userComment = ''
+    },
+    
+    // 设置评分
+    setRating(rating) {
+      this.userRating = rating
+    },
+    
+    // 提交评分和评价
+    async submitRating() {
+      if (!this.userRating) {
+        uni.showToast({
+          title: '请选择评分',
+          icon: 'none'
+        })
+        return
+      }
+      
+      // 获取用户信息
+      const userInfo = getUserInfo()
+      if (!userInfo || !userInfo.id) {
+        uni.showToast({
+          title: '获取用户信息失败',
+          icon: 'none'
+        })
+        return
+      }
+      
+      try {
+        const evaluationData = {
+          menuId: this.menuDetail.id,
+          userId: userInfo.id,
+          rating: this.userRating,
+          comment: this.userComment || `给了${this.userRating}星评价`
+        }
+        
+        const res = await submitEvaluation(evaluationData)
+        
+        if (res.code === 200) {
+          uni.showToast({
+            title: '评价提交成功',
+            icon: 'success'
+          })
+          this.closeRatingPopup()
+          // 可以在这里加载评价列表刷新
+          this.$emit('evaluation-submitted')
+        } else {
+          uni.showToast({
+            title: res.message || '评价提交失败',
+            icon: 'none'
+          })
+        }
+      } catch (error) {
+        console.error('提交评价错误', error)
+        uni.showToast({
+          title: '网络错误，请稍后重试',
+          icon: 'none'
+        })
+      }
+    },
+    
+    // 查看所有评价
+    viewAllRatings() {
+      // 跳转到评价列表页面，并传递菜单信息
+      uni.navigateTo({
+        url: `/pages/menu/ratings-list?id=${this.menuDetail.id}&name=${encodeURIComponent(this.menuDetail.dishes)}&date=${encodeURIComponent(this.formatDate(this.menuDetail.menuDate))}&mealType=${encodeURIComponent(this.menuDetail.mealType)}`,
+        fail: (err) => {
+          console.error('跳转评价列表页面失败:', err)
+          uni.showToast({
+            title: '页面跳转失败',
+            icon: 'none'
+          })
+        }
       })
     },
     
@@ -548,5 +678,121 @@ export default {
   font-size: 28rpx;
   color: #5677fc;
   margin-right: 10rpx;
+}
+
+/* 评分弹窗样式 */
+.rating-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.rating-popup-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.rating-popup-content {
+  position: relative;
+  background-color: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 30rpx;
+  padding-bottom: 150rpx;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 1002;
+}
+
+.rating-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20rpx;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.rating-popup-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.rating-popup-body {
+  padding: 30rpx 0;
+}
+
+.rating-stars-select {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.rating-label {
+  font-size: 28rpx;
+  color: #333;
+  margin-right: 20rpx;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+}
+
+.rating-text {
+  margin-left: 20rpx;
+  font-size: 28rpx;
+  color: #ff9700;
+}
+
+.comment-input {
+  margin-top: 20rpx;
+}
+
+.comment-label {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.comment-textarea {
+  width: 100%;
+  height: 100rpx;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+}
+
+.rating-popup-footer {
+  display: none;
+}
+
+.popup-btn {
+  width: 45%;
+}
+
+.prominent-submit {
+  margin-top: 30rpx;
+  padding: 0 20rpx;
+  margin-bottom: 120rpx;
+}
+
+.prominent-submit button {
+  height: 90rpx;
+  line-height: 90rpx;
+  font-size: 32rpx;
+  font-weight: bold;
 }
 </style> 
