@@ -207,9 +207,7 @@ export default {
     
     // 获取用户显示名称
     getUserDisplayName(item) {
-      if (!item.userId) return '匿名用户'
-      // 尝试各种可能的用户名称字段
-      return item.userName || item.userRealName || item.realName || item.username || `用户${item.userId}`
+      return '匿名用户'
     },
     
     // 跳转到评价页面

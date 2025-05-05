@@ -87,12 +87,8 @@
     </view>
 
     <!-- 详情组件 -->
-    <menu-detail
-      :visible="showDetailModal"
-      :menuItem="currentMenu"
-      @close="closeDetail"
-    ></menu-detail>
-    
+    <menu-detail :visible="showDetailModal" :menuItem="currentMenu" @close="closeDetail"></menu-detail>
+
     <!-- 自定义tabBar -->
     <tab-bar :current="0"></tab-bar>
   </view>
@@ -107,7 +103,9 @@
     getFullImageUrl
   } from '@/api/menu.js'
   import MenuDetail from '@/components/menu-detail/menu-detail.vue'
-  import { checkLogin } from '@/utils/auth.js'
+  import {
+    checkLogin
+  } from '@/utils/auth.js'
   import TabBar from '@/components/tab-bar/tab-bar.vue'
 
   export default {
@@ -150,7 +148,7 @@
           },
           {
             icon: 'feedback',
-            name: '评价反馈',
+            name: '反馈建议',
             path: '/pages/feedback/index'
           },
           {
@@ -176,14 +174,14 @@
     },
     mounted() {
       console.log('组件挂载完成 mounted')
-      
+
       // 添加一个强制检查的定时器，确保组件已挂载
       setTimeout(() => {
         console.log('定时器触发')
         // 打印可用的ThorUI图标
         console.log('使用的导航图标：', this.navItems.map(item => item.icon))
         console.log("开始获取菜单数据")
-        
+
         // 尝试获取菜单数据
         this.fetchMenuList()
       }, 500)
@@ -288,7 +286,7 @@
         this.showDetailModal = false
         this.currentMenu = null
       },
-      
+
       // 复制哈希值
       copyHash(hash) {
         uni.setClipboardData({
@@ -301,13 +299,13 @@
           }
         })
       },
-      
+
       // 缩短哈希字符串
       shortHash(hash) {
         if (!hash) return ''
         return hash.substring(0, 8) + '...' + hash.substring(hash.length - 6)
       },
-      
+
       // 提交反馈
       submitFeedback() {
         uni.showToast({
@@ -324,7 +322,8 @@
     min-height: 100vh;
     background-color: #f8f8f8;
     box-sizing: border-box;
-    padding-bottom: 120rpx; /* 为tabBar预留空间 */
+    padding-bottom: 120rpx;
+    /* 为tabBar预留空间 */
   }
 
   .container {
