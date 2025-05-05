@@ -66,9 +66,37 @@
 			}
 		},
 		{
+			"path": "pages/menu/rating-rank",
+			"style": {
+				"navigationBarTitleText": "评分榜单",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/feedback/index",
 			"style": {
 				"navigationBarTitleText": "反馈建议",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/community/index",
+			"style": {
+				"navigationBarTitleText": "家长社区",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/community/detail",
+			"style": {
+				"navigationBarTitleText": "文章详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/community/publish",
+			"style": {
+				"navigationBarTitleText": "发布帖子",
 				"navigationStyle": "custom"
 			}
 		}

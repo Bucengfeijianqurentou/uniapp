@@ -137,9 +137,9 @@
           }
         ],
         navItems: [{
-            icon: 'calendar',
-            name: '每周食谱',
-            path: '/pages/menu/weekly'
+            icon: 'star-fill',
+            name: '评分榜单',
+            path: '/pages/menu/rating-rank'
           },
           {
             icon: 'shop',
