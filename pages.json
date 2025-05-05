@@ -64,6 +64,13 @@
 				"navigationBarTitleText": "菜品评价列表",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/feedback/index",
+			"style": {
+				"navigationBarTitleText": "反馈建议",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {
