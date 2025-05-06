@@ -1,81 +1,33 @@
 import { getAuthHeader } from '@/utils/auth.js';
+import request from '@/utils/request.js'
+import config from '@/config/config.js'
 
 // 用户登录
-export async function login(data) {
-  try {
-    const response = await uni.request({
-      url: 'http://localhost:8080/api/user/login',
-      method: 'POST',
-      data: {
-        ...data,
-        role: 'STUDENT_PARENT' // 固定角色
-      },
-      header: {
-        'Content-Type': 'application/json'
-      }
-    });
-    
-    return response.data;
-  } catch (error) {
-    console.error('登录请求失败', error);
-    throw error;
-  }
+export function login(data) {
+  return request.post('/api/user/login', {
+    ...data,
+    role: 'STUDENT_PARENT' // 固定角色
+  })
 }
 
 // 获取用户信息
-export async function getUserDetail(userId) {
-  try {
-    const response = await uni.request({
-      url: `http://localhost:8080/api/user/${userId}`,
-      method: 'GET',
-      header: {
-        ...getAuthHeader()
-      }
-    });
-    
-    return response.data;
-  } catch (error) {
-    console.error('获取用户信息失败', error);
-    throw error;
-  }
+export function getUserDetail(userId) {
+  return request.get(`/api/user/${userId}`)
 }
 
 // 更新用户信息
-export async function updateUserInfo(userId, data) {
-  try {
-    const response = await uni.request({
-      url: `http://localhost:8080/api/user/${userId}`,
-      method: 'PUT',
-      data,
-      header: {
-        'Content-Type': 'application/json',
-        ...getAuthHeader()
-      }
-    });
-    
-    return response.data;
-  } catch (error) {
-    console.error('更新用户信息失败', error);
-    throw error;
-  }
+export function updateUserInfo(userId, data) {
+  return request.put(`/api/user/${userId}`, data)
 }
 
 // 修改密码
-export async function changePassword(data) {
-  try {
-    const response = await uni.request({
-      url: 'http://localhost:8080/api/user/changePassword',
-      method: 'POST',
-      data,
-      header: {
-        'Content-Type': 'application/json',
-        ...getAuthHeader()
-      }
-    });
-    
-    return response.data;
-  } catch (error) {
-    console.error('修改密码失败', error);
-    throw error;
-  }
+export function changePassword(data) {
+  return request.post('/api/user/changePassword', data)
+}
+
+export default {
+  login,
+  getUserDetail,
+  updateUserInfo,
+  changePassword
 } 
