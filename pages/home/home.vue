@@ -76,7 +76,6 @@
           <view class="menu-item" v-for="item in menuList" :key="item.id" @tap="showMenuDetail(item)">
             <view class="menu-image-box">
               <image :src="getFullImageUrl(item.imagePath)" mode="aspectFill" class="menu-image" />
-              <view class="menu-tag" :class="getStatusClass(item.status)">{{ getStatusText(item.status) }}</view>
             </view>
             <view class="menu-content">
               <view class="menu-header">
@@ -273,26 +272,6 @@
         if (!dateStr) return ''
         const date = new Date(dateStr)
         return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
-      },
-
-      // 获取状态文本
-      getStatusText(status) {
-        const statusMap = {
-          '0': '待审核',
-          '1': '审核中',
-          '2': '已通过'
-        }
-        return statusMap[status] || '未知状态'
-      },
-
-      // 获取状态对应的样式类
-      getStatusClass(status) {
-        const classMap = {
-          '0': 'status-pending',
-          '1': 'status-processing',
-          '2': 'status-approved'
-        }
-        return classMap[status] || ''
       },
 
       // 显示菜单详情
@@ -643,30 +622,6 @@
       height: 100%;
       object-fit: cover;
     }
-    
-    .menu-tag {
-      position: absolute;
-      top: 12rpx;
-      right: 12rpx;
-      font-size: 22rpx;
-      padding: 6rpx 14rpx;
-      color: #fff;
-      border-radius: 30rpx;
-      box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.15);
-      font-weight: 500;
-    }
-  }
-
-  .status-pending {
-    background: linear-gradient(135deg, #FF9500, #FF5E3A);
-  }
-
-  .status-processing {
-    background: linear-gradient(135deg, #4568DC, #5677fc);
-  }
-
-  .status-approved {
-    background: linear-gradient(135deg, #00B09B, #07c160);
   }
 
   .menu-content {

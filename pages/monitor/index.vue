@@ -52,7 +52,7 @@
 					</view>
 					<view class="info-item">
 						<tui-icon name="check" color="#5677fc" :size="18"></tui-icon>
-						<text class="info-text">画面每5分钟更新一次，确保您了解最新食堂作业状态</text>
+						<text class="info-text">实时监控，确保您了解最新食堂作业状态</text>
 					</view>
 					<view class="info-item">
 						<tui-icon name="check" color="#5677fc" :size="18"></tui-icon>
