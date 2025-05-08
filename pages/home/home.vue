@@ -1,22 +1,32 @@
 <template>
   <view class="page-container">
+    <!-- 顶部状态栏占位 -->
+    <view class="status-bar-holder"></view>
+    
     <view class="container">
       <!-- 头部区域 -->
       <view class="header">
-        <view class="page-title">
-          <text>中小学食堂监管平台</text>
-        </view>
-        <view class="search-box">
-          <tui-icon name="search" color="#999" :size="32"></tui-icon>
-          <input type="text" placeholder="搜索菜品" v-model="searchText" @input="handleSearch" />
+        <view class="header-content">
+          <view class="page-title">
+            <tui-icon name="food" color="#ff9500" :size="40"></tui-icon>
+            <text>中小学食堂监管平台</text>
+          </view>
+          <view class="search-box">
+            <tui-icon name="search" color="#999" :size="32"></tui-icon>
+            <input type="text" placeholder="搜索菜品" v-model="searchText" @input="handleSearch" />
+          </view>
         </view>
       </view>
 
       <!-- 轮播图区域 -->
       <view class="banner-box">
-        <swiper class="banner-swiper" circular :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500">
+        <swiper class="banner-swiper" circular :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500"
+          indicator-color="rgba(255,255,255,0.6)" indicator-active-color="#ff9500">
           <swiper-item v-for="(item, index) in banners" :key="index">
             <image :src="item.image" mode="aspectFill" class="banner-image" />
+            <view class="banner-title">
+              <text>{{item.title}}</text>
+            </view>
           </swiper-item>
         </swiper>
       </view>
@@ -24,7 +34,9 @@
       <!-- 功能导航区域 -->
       <view class="nav-box">
         <view class="nav-item" v-for="(item, index) in navItems" :key="index" @tap="navigateTo(item.path)">
-          <tui-icon :name="item.icon" color="#5677fc" :size="60"></tui-icon>
+          <view class="nav-icon-wrapper">
+            <tui-icon :name="item.icon" color="#ffffff" :size="40"></tui-icon>
+          </view>
           <text class="nav-text">{{ item.name }}</text>
         </view>
       </view>
@@ -32,8 +44,14 @@
       <!-- 菜单列表区域 -->
       <view class="menu-box">
         <view class="section-header">
-          <text class="section-title">本周菜单</text>
-          <text class="more-link" @tap="showAllMenus">查看全部</text>
+          <view class="title-with-icon">
+            <tui-icon name="calendar" color="#ff9500" :size="32"></tui-icon>
+            <text class="section-title">本周菜单</text>
+          </view>
+          <view class="more-link" @tap="showAllMenus">
+            <text>查看全部</text>
+            <tui-icon name="arrowright" color="#5677fc" :size="20"></tui-icon>
+          </view>
         </view>
 
         <!-- 加载提示 -->
@@ -60,9 +78,15 @@
                 <text class="menu-title">{{ item.dishes }}</text>
                 <text class="menu-type">{{ item.mealType }}</text>
               </view>
-              <view class="menu-date">{{ formatDate(item.menuDate) }}</view>
-              <view class="menu-provider">
-                <text>提供者: {{ item.userRealname }}</text>
+              <view class="menu-info">
+                <view class="menu-date">
+                  <tui-icon name="calendar" color="#999" :size="24"></tui-icon>
+                  <text>{{ formatDate(item.menuDate) }}</text>
+                </view>
+                <view class="menu-provider">
+                  <tui-icon name="people" color="#999" :size="24"></tui-icon>
+                  <text>{{ item.userRealname }}</text>
+                </view>
               </view>
             </view>
           </view>
@@ -72,11 +96,14 @@
       <!-- 公告区域 -->
       <view class="notice-box">
         <view class="notice-header">
-          <tui-icon name="news" color="#5677fc" :size="36"></tui-icon>
+          <tui-icon name="news" color="#ff9500" :size="32"></tui-icon>
           <text class="notice-title">最新公告</text>
         </view>
         <view class="notice-content">
-          <text>食品安全是学校工作的重中之重，请家长积极参与监督，共同守护孩子们的健康成长。</text>
+          <text class="notice-text">食品安全是学校工作的重中之重，请家长积极参与监督，共同守护孩子们的健康成长。</text>
+          <view class="notice-actions">
+            <tui-button type="primary" plain size="mini">查看详情</tui-button>
+          </view>
         </view>
       </view>
 
@@ -96,7 +123,8 @@
 
 <script>
   import {
-    TuiIcon
+    TuiIcon,
+    TuiButton
   } from '@/utils/thorui.js'
   import {
     getMenuList,
@@ -111,6 +139,7 @@
   export default {
     components: {
       TuiIcon,
+      TuiButton,
       MenuDetail,
       TabBar
     },
@@ -317,53 +346,72 @@
   }
 </script>
 
-<style>
+<style lang="scss">
   .page-container {
     min-height: 100vh;
-    background-color: #f8f8f8;
+    background-color: #f5f5f5;
     box-sizing: border-box;
     padding-bottom: 120rpx;
-    /* 为tabBar预留空间 */
+  }
+
+  .status-bar-holder {
+    height: var(--status-bar-height);
+    width: 100%;
   }
 
   .container {
-    padding: 30rpx;
+    padding: 20rpx;
   }
 
+  /* 头部区域样式 */
   .header {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 30rpx;
-  }
-
-  .page-title {
-    font-size: 40rpx;
-    font-weight: bold;
+    background: linear-gradient(135deg, #5677fc, #4a67d6);
+    border-radius: 20rpx;
+    padding: 30rpx;
     margin-bottom: 20rpx;
-    color: #333;
+    box-shadow: 0 4rpx 16rpx rgba(86, 119, 252, 0.2);
+    
+    .header-content {
+      .page-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20rpx;
+        
+        text {
+          font-size: 40rpx;
+          font-weight: bold;
+          color: #ffffff;
+          margin-left: 16rpx;
+          text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
   }
 
   .search-box {
     display: flex;
     align-items: center;
-    background-color: #f1f1f1;
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 40rpx;
     padding: 14rpx 20rpx;
-  }
-
-  .search-box input {
-    flex: 1;
-    margin-left: 20rpx;
-    font-size: 28rpx;
+    box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
+    
+    input {
+      flex: 1;
+      margin-left: 20rpx;
+      font-size: 28rpx;
+      color: #333;
+    }
   }
 
   /* 轮播图样式 */
   .banner-box {
     width: 100%;
-    height: 300rpx;
-    margin-bottom: 30rpx;
-    border-radius: 12rpx;
+    height: 320rpx;
+    margin-bottom: 20rpx;
+    border-radius: 16rpx;
     overflow: hidden;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
   }
 
   .banner-swiper {
@@ -375,6 +423,22 @@
     width: 100%;
     height: 100%;
   }
+  
+  .banner-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    padding: 20rpx 30rpx;
+    
+    text {
+      color: #ffffff;
+      font-size: 32rpx;
+      font-weight: bold;
+      text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
+    }
+  }
 
   /* 导航区域样式 */
   .nav-box {
@@ -382,9 +446,9 @@
     justify-content: space-between;
     background-color: #ffffff;
     padding: 30rpx;
-    border-radius: 12rpx;
-    margin-bottom: 30rpx;
-    box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+    border-radius: 16rpx;
+    margin-bottom: 20rpx;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
   }
 
   .nav-item {
@@ -392,39 +456,71 @@
     flex-direction: column;
     align-items: center;
     width: 22%;
+    
+    .nav-icon-wrapper {
+      width: 80rpx;
+      height: 80rpx;
+      border-radius: 20rpx;
+      background: linear-gradient(135deg, #5677fc, #4a67d6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12rpx;
+      box-shadow: 0 4rpx 10rpx rgba(86, 119, 252, 0.3);
+      transition: transform 0.2s ease;
+      
+      &:active {
+        transform: scale(0.95);
+      }
+    }
   }
 
   .nav-text {
-    font-size: 24rpx;
-    margin-top: 10rpx;
+    font-size: 26rpx;
+    margin-top: 8rpx;
     color: #333;
+    font-weight: 500;
   }
 
   /* 菜单区域样式 */
   .menu-box {
     background-color: #ffffff;
     padding: 30rpx;
-    border-radius: 12rpx;
-    margin-bottom: 30rpx;
-    box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+    border-radius: 16rpx;
+    margin-bottom: 20rpx;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
   }
 
   .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20rpx;
-  }
-
-  .section-title {
-    font-size: 32rpx;
-    font-weight: bold;
-    color: #333;
-  }
-
-  .more-link {
-    font-size: 24rpx;
-    color: #5677fc;
+    margin-bottom: 24rpx;
+    padding-bottom: 16rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+    
+    .title-with-icon {
+      display: flex;
+      align-items: center;
+      
+      .section-title {
+        font-size: 34rpx;
+        font-weight: bold;
+        color: #333;
+        margin-left: 12rpx;
+      }
+    }
+    
+    .more-link {
+      display: flex;
+      align-items: center;
+      font-size: 26rpx;
+      color: #5677fc;
+      
+      text {
+        margin-right: 4rpx;
+      }
+    }
   }
 
   .loading-box,
@@ -434,13 +530,13 @@
     align-items: center;
     justify-content: center;
     height: 300rpx;
-  }
-
-  .loading-text,
-  .empty-text {
-    margin-top: 20rpx;
-    font-size: 28rpx;
-    color: #999;
+    
+    .loading-text,
+    .empty-text {
+      margin-top: 20rpx;
+      font-size: 28rpx;
+      color: #999;
+    }
   }
 
   .menu-list {
@@ -449,12 +545,19 @@
 
   .menu-item {
     display: flex;
-    margin-bottom: 30rpx;
+    margin-bottom: 24rpx;
     background-color: #fff;
-    border-radius: 12rpx;
+    border-radius: 16rpx;
     overflow: hidden;
-    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
     height: 200rpx;
+    border: 1rpx solid #f0f0f0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    &:active {
+      transform: translateY(2rpx);
+      box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+    }
   }
 
   .menu-image-box {
@@ -462,26 +565,27 @@
     width: 200rpx;
     height: 200rpx;
     flex-shrink: 0;
-  }
-
-  .menu-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .menu-tag {
-    position: absolute;
-    top: 10rpx;
-    right: 10rpx;
-    font-size: 20rpx;
-    padding: 4rpx 12rpx;
-    color: #fff;
-    border-radius: 6rpx;
+    
+    .menu-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .menu-tag {
+      position: absolute;
+      top: 12rpx;
+      right: 12rpx;
+      font-size: 20rpx;
+      padding: 4rpx 12rpx;
+      color: #fff;
+      border-radius: 30rpx;
+      box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
+    }
   }
 
   .status-pending {
-    background-color: #ff9700;
+    background-color: #ff9500;
   }
 
   .status-processing {
@@ -506,64 +610,80 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    
+    .menu-title {
+      font-size: 32rpx;
+      font-weight: bold;
+      color: #333;
+      max-width: 65%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .menu-type {
+      font-size: 22rpx;
+      color: #5677fc;
+      padding: 6rpx 12rpx;
+      background-color: rgba(86, 119, 252, 0.1);
+      border-radius: 30rpx;
+      flex-shrink: 0;
+      font-weight: 500;
+    }
   }
 
-  .menu-title {
-    font-size: 30rpx;
-    font-weight: bold;
-    color: #333;
-    max-width: 65%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .menu-type {
-    font-size: 22rpx;
-    color: #5677fc;
-    padding: 4rpx 10rpx;
-    background-color: rgba(86, 119, 252, 0.1);
-    border-radius: 6rpx;
-    flex-shrink: 0;
-  }
-
-  .menu-date {
-    font-size: 24rpx;
-    color: #666;
-    margin: 10rpx 0;
-  }
-
-  .menu-provider {
-    font-size: 24rpx;
-    color: #999;
+  .menu-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8rpx;
+    
+    .menu-date, .menu-provider {
+      display: flex;
+      align-items: center;
+      font-size: 24rpx;
+      color: #666;
+      
+      text {
+        margin-left: 8rpx;
+      }
+    }
   }
 
   /* 公告区域样式 */
   .notice-box {
     background-color: #ffffff;
     padding: 30rpx;
-    border-radius: 12rpx;
-    margin-bottom: 30rpx;
-    box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+    border-radius: 16rpx;
+    margin-bottom: 20rpx;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
   }
 
   .notice-header {
     display: flex;
     align-items: center;
     margin-bottom: 20rpx;
-  }
-
-  .notice-title {
-    font-size: 32rpx;
-    font-weight: bold;
-    margin-left: 10rpx;
-    color: #333;
+    
+    .notice-title {
+      font-size: 34rpx;
+      font-weight: bold;
+      margin-left: 12rpx;
+      color: #333;
+    }
   }
 
   .notice-content {
-    font-size: 28rpx;
-    color: #666;
-    line-height: 1.5;
+    .notice-text {
+      font-size: 28rpx;
+      color: #666;
+      line-height: 1.6;
+      display: block;
+      margin-bottom: 20rpx;
+    }
+    
+    .notice-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 
   /* 底部样式 */
