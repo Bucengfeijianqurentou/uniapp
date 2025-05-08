@@ -112,6 +112,7 @@
 <script>
 	import { TuiIcon, TuiButton } from '@/utils/thorui.js'
 	import TabBar from '@/components/tab-bar/tab-bar.vue'
+	import config from '@/config/config.js'
 	
 	export default {
 		components: {
@@ -122,8 +123,8 @@
 		data() {
 			return {
 				webRtcServer: null,
-				rtspUrl: 'rtsp://admin:123456@192.168.62.104:554/cam/realmonitor?channel=1&subtype=0',
-				serverUrl: 'http://localhost:8000',
+				rtspUrl: config.monitor.rtspUrl,
+				serverUrl: config.monitor.webRtcServerUrl,
 				connectionStatus: '等待连接视频流',
 				statusClass: 'status-pending',
 				showDebug: false,

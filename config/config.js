@@ -7,5 +7,12 @@ export default {
   // 默认请求头
   header: {
     'Content-Type': 'application/json;charset=UTF-8'
+  },
+  // 监控配置
+  monitor: {
+    // RTSP视频流地址
+    rtspUrl: 'rtsp://admin:123456@192.168.62.104:554/cam/realmonitor?channel=1&subtype=0',
+    // WebRTC服务器地址
+    webRtcServerUrl: 'http://localhost:8000'
   }
 }
