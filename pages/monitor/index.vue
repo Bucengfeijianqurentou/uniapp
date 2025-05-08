@@ -14,12 +14,14 @@
 		
 		<!-- 视频监控主体部分 -->
 		<view class="video-container">
-			<view class="video-wrapper">
+			<view class="video-wrapper" ref="videoWrapper">
 				<!-- 视频占位 -->
 				<view v-show="showPlaceholder" class="placeholder">
 					<tui-icon name="video-fill" color="#fff" :size="50"></tui-icon>
 					<text class="placeholder-text">正在连接监控画面...</text>
 				</view>
+				<!-- 视频元素将直接添加在这里 -->
+				<view id="video-container"></view>
 			</view>
 			
 			<!-- 连接状态显示 -->
@@ -52,7 +54,7 @@
 					</view>
 					<view class="info-item">
 						<tui-icon name="check" color="#5677fc" :size="18"></tui-icon>
-						<text class="info-text">实时监控，确保您了解最新食堂作业状态</text>
+						<text class="info-text">画面每5分钟更新一次，确保您了解最新食堂作业状态</text>
 					</view>
 					<view class="info-item">
 						<tui-icon name="check" color="#5677fc" :size="18"></tui-icon>
@@ -286,6 +288,13 @@
 					// 先移除可能存在的旧元素
 					this.removeVideoElement();
 					
+					// 获取视频容器元素
+					const videoContainer = document.getElementById('video-container');
+					if (!videoContainer) {
+						console.error('无法找到视频容器元素');
+						return;
+					}
+					
 					// 创建新的video元素
 					this.videoElement = document.createElement('video');
 					this.videoElement.id = 'webrtc-video';
@@ -295,11 +304,19 @@
 					this.videoElement.playsInline = true; // 兼容iOS
 					this.videoElement.controls = false;
 					
-					// 直接添加到body，然后通过CSS定位到正确位置
-					document.body.appendChild(this.videoElement);
+					// 设置视频样式
+					Object.assign(this.videoElement.style, {
+						width: '100%',
+						height: '100%',
+						objectFit: 'cover',
+						borderRadius: '20rpx',
+						position: 'absolute',
+						top: 0,
+						left: 0
+					});
 					
-					// 设置样式定位到视频容器位置
-					this.positionVideoElement();
+					// 将视频元素添加到容器中
+					videoContainer.appendChild(this.videoElement);
 					
 					console.log('视频元素创建成功');
 				} catch(e) {
@@ -309,31 +326,10 @@
 				}
 			},
 			
-			// 定位视频元素
+			// 定位视频元素 - 这个方法不再需要在滚动时调整位置
 			positionVideoElement() {
-				try {
-					if (!this.videoElement) return;
-					
-					// 获取视频容器的位置信息
-					const videoWrappers = document.getElementsByClassName('video-wrapper');
-					if (videoWrappers.length > 0) {
-						const rect = videoWrappers[0].getBoundingClientRect();
-						
-						// 设置视频元素样式
-						Object.assign(this.videoElement.style, {
-							position: 'fixed',
-							top: rect.top + 'px',
-							left: rect.left + 'px',
-							width: rect.width + 'px',
-							height: rect.height + 'px',
-							zIndex: '10',
-							objectFit: 'cover',
-							borderRadius: '12rpx'
-						});
-					}
-				} catch(e) {
-					console.error('定位视频元素失败:', e);
-				}
+				// 不需要特殊定位，视频元素会随着容器一起滚动
+				console.log('视频元素定位在容器内');
 			},
 			
 			// 移除视频元素
@@ -402,9 +398,6 @@
 						console.warn('断开旧连接时出错:', e);
 					}
 				}
-				
-				// 更新视频元素位置
-				this.positionVideoElement();
 				
 				// 连接到新流
 				setTimeout(() => {
@@ -541,6 +534,15 @@
 	position: relative;
 	margin-bottom: 30rpx;
 	box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.3);
+}
+
+#video-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 3;
 }
 
 .placeholder {
