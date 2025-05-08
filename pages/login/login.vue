@@ -1,22 +1,27 @@
 <template>
   <view class="login-container">
-    <!-- 顶部装饰波浪 -->
-    <view class="wave-box">
-      <view class="wave wave1"></view>
-      <view class="wave wave2"></view>
+    <!-- 背景层 -->
+    <view class="bg-gradient">
+      <image class="bg-pattern" src="/static/images/pattern.png" mode="repeat"></image>
     </view>
     
-    <!-- 徽标区域 -->
-    <view class="logo-area">
-      <view class="logo-icon">
-        <tui-icon name="shield" color="#ffffff" :size="80"></tui-icon>
+    <!-- 顶部装饰区域 -->
+    <view class="header-area">
+      <view class="logo">
+        <view class="logo-icon">
+          <tui-icon name="shield" color="#ffffff" :size="80"></tui-icon>
+        </view>
+        <view class="logo-text">
+          <text class="logo-title">中小学食堂监管平台</text>
+          <text class="logo-subtitle">家长监督端</text>
+        </view>
       </view>
-      <view class="logo-title">中小学食堂监管平台</view>
-      <view class="logo-subtitle">家长监督端</view>
     </view>
     
     <!-- 登录表单卡片 -->
     <view class="login-card">
+      <view class="card-title">账号登录</view>
+      
       <!-- 表单项 -->
       <view class="form-group">
         <view class="input-group">
@@ -40,7 +45,7 @@
             placeholder-class="placeholder"
           />
           <view class="eye-icon" @tap="togglePasswordVisibility">
-            <tui-icon :name="passwordVisible ? 'eye' : 'eye-hide'" :size="40" color="#999"></tui-icon>
+            <tui-icon :name="passwordVisible ? 'eye' : 'eye-hide'" :size="36" color="#999"></tui-icon>
           </view>
         </view>
         
@@ -213,59 +218,43 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f8f8f8;
+  background-color: #f9fafc;
   overflow: hidden;
 }
 
-/* 顶部波浪装饰 */
-.wave-box {
+/* 背景渐变和图案 */
+.bg-gradient {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 400rpx;
-  overflow: hidden;
-  background: linear-gradient(135deg, #4e62cc 0%, #5677fc 100%);
+  height: 450rpx;
+  background: linear-gradient(135deg, #4568DC, #B06AB3);
   z-index: 1;
+  overflow: hidden;
 }
 
-.wave {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 200%;
-  height: 80rpx;
-  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDQwIDMyMCI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIwLjciIGQ9Ik0wLDMyMEwxNDQwLDMyMEwxNDQwLDMyMEMxMTUyLDMyMCw4ODgsMzIwLDcyMCwzMjBDNTUyLDMyMCwyODgsMzIwLDAsMzIwWiI+PC9wYXRoPjwvc3ZnPg==') repeat-x;
-  background-size: 1440px 80rpx;
+.bg-pattern {
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
 }
 
-.wave1 {
-  opacity: 0.7;
-  animation: wave 12s linear infinite;
-}
-
-.wave2 {
-  opacity: 0.4;
-  animation: wave 10s linear infinite reverse;
-}
-
-@keyframes wave {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  100% {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-/* 徽标区域 */
-.logo-area {
-  margin-top: 100rpx;
+/* 顶部徽标区域 */
+.header-area {
+  width: 100%;
+  padding-top: 100rpx;
+  padding-bottom: 80rpx;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 2;
-  padding: 0 40rpx;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .logo-icon {
@@ -277,7 +266,14 @@ export default {
   justify-content: center;
   align-items: center;
   margin-bottom: 30rpx;
-  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(5px);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .logo-title {
@@ -286,26 +282,49 @@ export default {
   font-weight: bold;
   text-align: center;
   margin-bottom: 16rpx;
-  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.2);
+  letter-spacing: 2rpx;
 }
 
 .logo-subtitle {
   font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   background: rgba(255, 255, 255, 0.2);
-  padding: 8rpx 30rpx;
+  padding: 8rpx 40rpx;
   border-radius: 40rpx;
+  backdrop-filter: blur(5px);
 }
 
 /* 登录卡片 */
 .login-card {
   width: 650rpx;
-  margin-top: 60rpx;
   background-color: #ffffff;
-  border-radius: 24rpx;
-  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.08);
+  border-radius: 30rpx;
+  box-shadow: 0 15rpx 40rpx rgba(0, 0, 0, 0.1);
   padding: 50rpx 40rpx;
   z-index: 2;
+  position: relative;
+}
+
+.card-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 40rpx;
+  text-align: center;
+  position: relative;
+}
+
+.card-title:after {
+  content: '';
+  position: absolute;
+  bottom: -10rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80rpx;
+  height: 6rpx;
+  background: linear-gradient(to right, #4568DC, #B06AB3);
+  border-radius: 3rpx;
 }
 
 /* 表单样式 */
@@ -317,14 +336,16 @@ export default {
   display: flex;
   align-items: center;
   background-color: #f7f9fc;
-  border-radius: 16rpx;
+  border: 2rpx solid #eef2f9;
+  border-radius: 20rpx;
   padding: 20rpx 30rpx;
   margin-bottom: 30rpx;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 
 .input-group:focus-within {
-  box-shadow: 0 0 0 2rpx rgba(86, 119, 252, 0.2);
+  box-shadow: 0 0 0 3rpx rgba(69, 104, 220, 0.1);
+  border-color: #4568DC;
   background-color: #ffffff;
 }
 
@@ -356,19 +377,21 @@ export default {
   height: 90rpx;
   line-height: 90rpx;
   text-align: center;
-  background: linear-gradient(135deg, #5677fc 0%, #4e62cc 100%);
+  background: linear-gradient(135deg, #4568DC, #B06AB3);
   border-radius: 45rpx;
   color: #ffffff;
   font-size: 32rpx;
   font-weight: bold;
   margin-bottom: 40rpx;
-  box-shadow: 0 10rpx 20rpx rgba(86, 119, 252, 0.3);
-  transition: transform 0.3s;
+  box-shadow: 0 10rpx 20rpx rgba(69, 104, 220, 0.25);
+  transition: all 0.3s ease;
+  border: none;
 }
 
 .btn-hover {
-  transform: translateY(3rpx);
-  box-shadow: 0 5rpx 10rpx rgba(86, 119, 252, 0.3);
+  transform: translateY(3rpx) scale(0.98);
+  box-shadow: 0 5rpx 10rpx rgba(69, 104, 220, 0.2);
+  opacity: 0.9;
 }
 
 /* 辅助功能区 */
@@ -379,8 +402,13 @@ export default {
 }
 
 .helper-link {
-  color: #5677fc;
+  color: #4568DC;
   font-size: 28rpx;
+  transition: opacity 0.3s ease;
+}
+
+.helper-link:active {
+  opacity: 0.7;
 }
 
 /* 安全提示 */
@@ -388,16 +416,17 @@ export default {
   margin-top: 40rpx;
   display: flex;
   align-items: center;
-  background-color: rgba(86, 119, 252, 0.05);
+  background-color: rgba(69, 104, 220, 0.05);
   padding: 20rpx 30rpx;
-  border-radius: 12rpx;
+  border-radius: 20rpx;
   width: 650rpx;
 }
 
 .security-tips text {
   font-size: 24rpx;
-  color: #999;
+  color: #888;
   margin-left: 15rpx;
+  line-height: 1.4;
 }
 
 /* 底部版权信息 */
@@ -411,6 +440,6 @@ export default {
   display: block;
   font-size: 24rpx;
   color: #999;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 </style> 

@@ -145,7 +145,7 @@ export default {
           title: this.postTitle.trim(),
           content: this.postContent.trim(),
           authorId: userInfo.id,
-          authorName: userInfo.nickname || (userInfo.gender === '1' ? '张爸爸' : '李妈妈'),
+          authorName: userInfo.realName || '张爸爸',
           publishTime: formattedTime,
           tags: [...this.selectedTags]
         }
