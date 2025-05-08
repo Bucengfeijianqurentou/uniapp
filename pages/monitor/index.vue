@@ -3,7 +3,6 @@
 		<!-- 页面顶部标题栏 -->
 		<view class="header">
 			<view class="header-title">
-				<tui-icon name="arrowleft" color="#fff" :size="24" @click="goBack"></tui-icon>
 				<text class="title-text">食堂实时监控</text>
 			</view>
 			<view class="camera-info">
@@ -208,14 +207,6 @@
 				} catch (e) {
 					console.error('移除脚本失败:', e);
 				}
-			},
-			
-			// 返回上一页
-			goBack() {
-				this.cleanupResources(); // 先清理资源
-				uni.switchTab({
-					url: '/pages/home/home'
-				});
 			},
 			
 			// 获取当前时间
@@ -502,9 +493,9 @@
 	align-items: center;
 	font-size: 36rpx;
 	font-weight: bold;
+	justify-content: center;
 	
 	.title-text {
-		margin-left: 20rpx;
 		letter-spacing: 1px;
 		text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
 	}
