@@ -94,7 +94,7 @@
               </view>
             </view>
             <view class="inspection-summary">
-              <view class="status-tag status-approved" style="display:inline-block;margin-right:10rpx;">质检已通过</view>
+              <view class="status-tag status-approved" style="display:inline-block;margin-right:10rpx;">已完成质检</view>
               <text class="inspection-date">{{formatDate(menuDetail.menuDate)}}</text>
             </view>
           </view>

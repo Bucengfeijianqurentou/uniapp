@@ -99,6 +99,13 @@
 				"navigationBarTitleText": "发布帖子",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/monitor/index",
+			"style": {
+				"navigationBarTitleText": "实时监控",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"globalStyle": {

@@ -142,9 +142,9 @@
             path: '/pages/menu/rating-rank'
           },
           {
-            icon: 'shop',
-            name: '食材信息',
-            path: '/pages/food/info'
+            icon: 'video',
+            name: '实时监控',
+            path: '/pages/monitor/index'
           },
           {
             icon: 'feedback',
