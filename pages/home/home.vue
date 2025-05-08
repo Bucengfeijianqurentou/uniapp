@@ -3,21 +3,26 @@
     <!-- 顶部状态栏占位 -->
     <view class="status-bar-holder"></view>
     
-    <view class="container">
-      <!-- 头部区域 -->
-      <view class="header">
-        <view class="header-content">
-          <view class="page-title">
-            <tui-icon name="food" color="#ff9500" :size="40"></tui-icon>
-            <text>中小学食堂监管平台</text>
-          </view>
-          <view class="search-box">
-            <tui-icon name="search" color="#999" :size="32"></tui-icon>
-            <input type="text" placeholder="搜索菜品" v-model="searchText" @input="handleSearch" />
-          </view>
+    <!-- 顶部固定区域 - 优化设计 -->
+    <view class="fixed-header">
+      <view class="header-wrapper">
+        <view class="platform-title">
+          <tui-icon name="food" color="#fff" :size="36"></tui-icon>
+          <text>中小学食堂监管平台</text>
         </view>
       </view>
-
+      <view class="search-container">
+        <view class="search-box">
+          <tui-icon name="search" color="#5677fc" :size="32"></tui-icon>
+          <input type="text" placeholder="搜索菜品" v-model="searchText" @input="handleSearch" />
+        </view>
+      </view>
+    </view>
+    
+    <!-- 为固定顶部预留空间 -->
+    <view class="header-placeholder"></view>
+    
+    <view class="container">
       <!-- 轮播图区域 -->
       <view class="banner-box">
         <swiper class="banner-swiper" circular :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500"
@@ -34,7 +39,7 @@
       <!-- 功能导航区域 -->
       <view class="nav-box">
         <view class="nav-item" v-for="(item, index) in navItems" :key="index" @tap="navigateTo(item.path)">
-          <view class="nav-icon-wrapper">
+          <view class="nav-icon-wrapper" :class="`icon-gradient-${index+1}`">
             <tui-icon :name="item.icon" color="#ffffff" :size="40"></tui-icon>
           </view>
           <text class="nav-text">{{ item.name }}</text>
@@ -349,7 +354,7 @@
 <style lang="scss">
   .page-container {
     min-height: 100vh;
-    background-color: #f5f5f5;
+    background-color: #f8f9fc;
     box-sizing: border-box;
     padding-bottom: 120rpx;
   }
@@ -358,60 +363,97 @@
     height: var(--status-bar-height);
     width: 100%;
   }
+  
+  /* 固定顶部区域 - 优化后 */
+  .fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: calc(var(--status-bar-height) + 130rpx);
+    background: linear-gradient(135deg, #4568DC, #B06AB3);
+    padding-top: var(--status-bar-height);
+    box-shadow: 0 8rpx 24rpx rgba(69, 104, 220, 0.25);
+    
+    .header-wrapper {
+      padding: 15rpx 30rpx;
+      
+      .platform-title {
+        display: flex;
+        align-items: center;
+        
+        text {
+          font-size: 34rpx;
+          font-weight: bold;
+          color: #fff;
+          margin-left: 16rpx;
+          text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
+          letter-spacing: 1px;
+        }
+      }
+    }
+    
+    .search-container {
+      padding: 0 30rpx 15rpx;
+      
+      .search-box {
+        display: flex;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 40rpx;
+        padding: 10rpx 20rpx;
+        box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.12);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        
+        &:active {
+          transform: scale(0.98);
+          box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.08);
+        }
+        
+        input {
+          flex: 1;
+          margin-left: 20rpx;
+          font-size: 28rpx;
+          color: #333;
+          height: 50rpx;
+        }
+      }
+    }
+  }
+  
+  /* 为固定顶部预留的空间 */
+  .header-placeholder {
+    height: calc(var(--status-bar-height) + 70rpx);
+    width: 100%;
+  }
 
   .container {
     padding: 20rpx;
   }
 
-  /* 头部区域样式 */
-  .header {
-    background: linear-gradient(135deg, #5677fc, #4a67d6);
-    border-radius: 20rpx;
-    padding: 30rpx;
-    margin-bottom: 20rpx;
-    box-shadow: 0 4rpx 16rpx rgba(86, 119, 252, 0.2);
-    
-    .header-content {
-      .page-title {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20rpx;
-        
-        text {
-          font-size: 40rpx;
-          font-weight: bold;
-          color: #ffffff;
-          margin-left: 16rpx;
-          text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
-        }
-      }
-    }
-  }
-
-  .search-box {
-    display: flex;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 40rpx;
-    padding: 14rpx 20rpx;
-    box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
-    
-    input {
-      flex: 1;
-      margin-left: 20rpx;
-      font-size: 28rpx;
-      color: #333;
-    }
-  }
-
-  /* 轮播图样式 */
+  /* 轮播图样式优化 */
   .banner-box {
     width: 100%;
-    height: 320rpx;
-    margin-bottom: 20rpx;
-    border-radius: 16rpx;
+    height: 360rpx;
+    margin-bottom: 30rpx;
+    border-radius: 24rpx;
     overflow: hidden;
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100rpx;
+      background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+      pointer-events: none;
+      z-index: 2;
+    }
   }
 
   .banner-swiper {
@@ -429,26 +471,27 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-    padding: 20rpx 30rpx;
+    padding: 30rpx;
+    z-index: 3;
     
     text {
       color: #ffffff;
-      font-size: 32rpx;
+      font-size: 34rpx;
       font-weight: bold;
-      text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
+      text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.6);
+      letter-spacing: 1px;
     }
   }
 
-  /* 导航区域样式 */
+  /* 导航区域样式优化 */
   .nav-box {
     display: flex;
     justify-content: space-between;
     background-color: #ffffff;
-    padding: 30rpx;
-    border-radius: 16rpx;
-    margin-bottom: 20rpx;
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+    padding: 40rpx 30rpx;
+    border-radius: 24rpx;
+    margin-bottom: 30rpx;
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
   }
 
   .nav-item {
@@ -458,45 +501,61 @@
     width: 22%;
     
     .nav-icon-wrapper {
-      width: 80rpx;
-      height: 80rpx;
-      border-radius: 20rpx;
-      background: linear-gradient(135deg, #5677fc, #4a67d6);
+      width: 110rpx;
+      height: 110rpx;
+      border-radius: 28rpx;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 12rpx;
-      box-shadow: 0 4rpx 10rpx rgba(86, 119, 252, 0.3);
-      transition: transform 0.2s ease;
+      margin-bottom: 16rpx;
+      box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       
       &:active {
-        transform: scale(0.95);
+        transform: translateY(6rpx) scale(0.95);
+        box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
       }
+    }
+    
+    .icon-gradient-1 {
+      background: linear-gradient(135deg, #FF5E62, #FF9966);
+    }
+    
+    .icon-gradient-2 {
+      background: linear-gradient(135deg, #36D1DC, #5B86E5);
+    }
+    
+    .icon-gradient-3 {
+      background: linear-gradient(135deg, #11998e, #38ef7d);
+    }
+    
+    .icon-gradient-4 {
+      background: linear-gradient(135deg, #834d9b, #d04ed6);
     }
   }
 
   .nav-text {
-    font-size: 26rpx;
-    margin-top: 8rpx;
+    font-size: 28rpx;
+    margin-top: 14rpx;
     color: #333;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   /* 菜单区域样式 */
   .menu-box {
     background-color: #ffffff;
     padding: 30rpx;
-    border-radius: 16rpx;
-    margin-bottom: 20rpx;
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+    border-radius: 24rpx;
+    margin-bottom: 30rpx;
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
   }
 
   .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24rpx;
-    padding-bottom: 16rpx;
+    margin-bottom: 30rpx;
+    padding-bottom: 20rpx;
     border-bottom: 1rpx solid #f0f0f0;
     
     .title-with-icon {
@@ -508,6 +567,7 @@
         font-weight: bold;
         color: #333;
         margin-left: 12rpx;
+        letter-spacing: 1px;
       }
     }
     
@@ -516,6 +576,14 @@
       align-items: center;
       font-size: 26rpx;
       color: #5677fc;
+      padding: 8rpx 16rpx;
+      background-color: rgba(86, 119, 252, 0.1);
+      border-radius: 30rpx;
+      transition: background-color 0.3s ease;
+      
+      &:active {
+        background-color: rgba(86, 119, 252, 0.2);
+      }
       
       text {
         margin-right: 4rpx;
@@ -545,18 +613,22 @@
 
   .menu-item {
     display: flex;
-    margin-bottom: 24rpx;
+    margin-bottom: 30rpx;
     background-color: #fff;
-    border-radius: 16rpx;
+    border-radius: 20rpx;
     overflow: hidden;
-    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.08);
     height: 200rpx;
-    border: 1rpx solid #f0f0f0;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
     
     &:active {
-      transform: translateY(2rpx);
-      box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+      transform: translateY(4rpx) scale(0.99);
+      box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 
@@ -576,29 +648,30 @@
       position: absolute;
       top: 12rpx;
       right: 12rpx;
-      font-size: 20rpx;
-      padding: 4rpx 12rpx;
+      font-size: 22rpx;
+      padding: 6rpx 14rpx;
       color: #fff;
       border-radius: 30rpx;
-      box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.15);
+      font-weight: 500;
     }
   }
 
   .status-pending {
-    background-color: #ff9500;
+    background: linear-gradient(135deg, #FF9500, #FF5E3A);
   }
 
   .status-processing {
-    background-color: #5677fc;
+    background: linear-gradient(135deg, #4568DC, #5677fc);
   }
 
   .status-approved {
-    background-color: #07c160;
+    background: linear-gradient(135deg, #00B09B, #07c160);
   }
 
   .menu-content {
     flex: 1;
-    padding: 20rpx;
+    padding: 24rpx;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -624,18 +697,18 @@
     .menu-type {
       font-size: 22rpx;
       color: #5677fc;
-      padding: 6rpx 12rpx;
+      padding: 8rpx 16rpx;
       background-color: rgba(86, 119, 252, 0.1);
       border-radius: 30rpx;
       flex-shrink: 0;
-      font-weight: 500;
+      font-weight: 600;
     }
   }
 
   .menu-info {
     display: flex;
     flex-direction: column;
-    gap: 8rpx;
+    gap: 12rpx;
     
     .menu-date, .menu-provider {
       display: flex;
@@ -644,7 +717,7 @@
       color: #666;
       
       text {
-        margin-left: 8rpx;
+        margin-left: 10rpx;
       }
     }
   }
@@ -653,9 +726,10 @@
   .notice-box {
     background-color: #ffffff;
     padding: 30rpx;
-    border-radius: 16rpx;
-    margin-bottom: 20rpx;
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+    border-radius: 24rpx;
+    margin-bottom: 30rpx;
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+    background-image: linear-gradient(to bottom right, rgba(255, 149, 0, 0.05), rgba(255, 149, 0, 0.1));
   }
 
   .notice-header {
@@ -668,6 +742,7 @@
       font-weight: bold;
       margin-left: 12rpx;
       color: #333;
+      letter-spacing: 1px;
     }
   }
 
@@ -675,9 +750,9 @@
     .notice-text {
       font-size: 28rpx;
       color: #666;
-      line-height: 1.6;
+      line-height: 1.7;
       display: block;
-      margin-bottom: 20rpx;
+      margin-bottom: 24rpx;
     }
     
     .notice-actions {
@@ -689,8 +764,9 @@
   /* 底部样式 */
   .footer {
     text-align: center;
-    padding: 30rpx 0;
+    padding: 40rpx 0;
     font-size: 24rpx;
     color: #999;
+    letter-spacing: 1rpx;
   }
 </style>
