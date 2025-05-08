@@ -138,6 +138,10 @@
 				this.loadScript('/static/adapter-latest.js', () => {
 					this.loadScript('/static/webrtcstreamer.js', () => {
 						this.initWebRTC();
+						// 初始化完成后自动播放
+						setTimeout(() => {
+							this.startVideo();
+						}, 1000);
 					});
 				});
 			}, 500);
@@ -153,6 +157,16 @@
 		onUnload() {
 			console.log('页面卸载，清理资源');
 			this.cleanupResources();
+		},
+		onShow() {
+			console.log('页面显示，检查是否需要播放视频');
+			// 如果已经初始化但未播放，则自动开始播放
+			if (this.webRtcServer && this.showPlaceholder) {
+				console.log('自动开始播放视频');
+				setTimeout(() => {
+					this.startVideo();
+				}, 500);
+			}
 		},
 		methods: {
 			// 清理所有资源
@@ -238,7 +252,7 @@
 						// 创建WebRTC实例
 						this.webRtcServer = new WebRtcStreamer(this.videoElement, this.serverUrl);
 						
-						this.connectionStatus = '系统就绪，请点击开始播放';
+						this.connectionStatus = '系统就绪，正在连接视频流...';
 						this.statusClass = 'status-ready';
 						console.log('WebRTC初始化成功');
 						
