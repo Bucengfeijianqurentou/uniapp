@@ -109,6 +109,7 @@
 <script>
 import { TuiIcon } from '@/utils/thorui.js'
 import { getFullImageUrl } from '@/api/menu.js'
+import config from '@/config/config.js'
 
 export default {
   components: {
@@ -152,7 +153,7 @@ export default {
       
       try {
         const response = await uni.request({
-          url: `http://localhost:8080/api/inspections/${this.menuId}`,
+          url: `${config.baseUrl}/api/inspections/${this.menuId}`, // 使用配置文件中的baseUrl
           method: 'GET'
         })
         
@@ -464,4 +465,4 @@ export default {
   justify-content: center;
   margin-bottom: 30rpx;
 }
-</style> 
+</style>
